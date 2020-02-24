@@ -2,11 +2,19 @@
  * web 路由
  */
 
+import info from '@/views/web/info'
+import typelist from '@/views/web/typelist'
+
 const webRouters = [
     {
-        path: '/spring',
-        name: 'spring',
-        component: () => import('@/views/web/spring/index')
+        path: '/info',
+        name: 'info',
+        component: info
+    },
+    {
+        path: '/typelist',
+        name: 'typelist',
+        component: typelist
     }
 ]
 
