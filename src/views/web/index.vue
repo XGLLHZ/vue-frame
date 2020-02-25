@@ -41,9 +41,9 @@
         </div>
         <div class="con-right">
           <div class="right-one">
-            <span><router-link to="/"><img src="../assets/github.png" style="width:14%; margin-left:25%"/></router-link></span>
-            <span><router-link to="/"><img src="../assets/csdn.png" style="width:14%; margin-left:4%"/></router-link></span>
-            <span><router-link to="/"><img src="../assets/sina.png" style="width:14%; margin-left:4%"/></router-link></span>
+            <span><router-link to="/"><img src="../../assets/github.png" style="width:14%; margin-left:25%"/></router-link></span>
+            <span><router-link to="/"><img src="../../assets/csdn.png" style="width:14%; margin-left:4%"/></router-link></span>
+            <span><router-link to="/"><img src="../../assets/sina.png" style="width:14%; margin-left:4%"/></router-link></span>
           </div>
           <div class="right-two">
             <span>精选文章</span>
@@ -86,6 +86,7 @@ export default {
   width: 100%;
 }
 .con {
+  margin-top: 40px;
   width: 100%;
   height: 800px;
 }
@@ -162,7 +163,7 @@ export default {
   width: calc(100% - 4px);
   height: 146px;
   border-radius: 10px;
-  background-image: url('../assets/springcloud.jpg');
+  background-image: url('../../assets/springcloud.jpg');
   background-repeat: no-repeat;
   border: 2px solid #ffffff;
 }
