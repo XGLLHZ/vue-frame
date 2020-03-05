@@ -5,9 +5,9 @@
             <span><span style="color: yellow">0_0 XGLLHZ </span>管理系统</span>
         </div>
         <div class="aside-menu">
-            <el-menu default-active="1" active-text-color="yellow">
+            <el-menu default-active="1" active-text-color="#ffff00" background-color="#181818" text-color="#F4F5F8">
                 <router-link to="/system" style="text-decoration: none; color: #F4F5F8;">
-                    <el-menu-item index="1"><i class="el-icon-home"/>首页</el-menu-item>
+                    <el-menu-item index="1"><i class="el-icon-document"/>首页</el-menu-item>
                 </router-link>
                 <router-link to="/blogindex" style="text-decoration: none; color: #F4F5F8;">
                     <el-menu-item index="2"><i class="el-icon-document"/>博客管理</el-menu-item>
@@ -16,7 +16,7 @@
                     <el-menu-item index="3"><i class="el-icon-document"/>类别管理</el-menu-item>
                 </router-link>
                 <el-submenu index="4">
-                    <template slot="title">权限管理</template>
+                    <template slot="title"><i class="el-icon-document"/>权限管理</template>
                     <router-link to="/system" style="text-decoration: none; color: #F4F5F8;">
                         <el-menu-item index="4-1"><i class="el-icon-user"/>用户管理</el-menu-item>
                     </router-link>
@@ -70,14 +70,14 @@ export default {
     line-height: 50px;
     text-decoration: none;
 }
-.el-submenu:hover {
+/* .el-submenu:hover {
     cursor: pointer;
     background-color: #1f2d3d;
 }
 .el-menu-item:hover {
     cursor: pointer;
     background-color: #1f2d3d;
-}
+} */
 </style>
 
 

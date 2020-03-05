@@ -9,6 +9,7 @@ import router from './router'   //路由
 import ElementUI from 'element-ui'   //组件库
 //import store from './store'   //store
 //import { initMenu } from './utils/menu'   //初始化 menu
+import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false
 
