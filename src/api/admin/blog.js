@@ -1,16 +1,15 @@
 /**
- * web-首页 api 
+ * 博客管理 api
  */
 
 import request from '@/utils/request'
 
-//文章列表
-export function getArticleList(params) {
+//列表
+export function getList(params) {
     return request({
         method: 'post',
-        url: '/api/web/article/weblist',
+        url: '/api/web/admin/blog/list',
         data: params
     });
 }
-
 

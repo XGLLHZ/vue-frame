@@ -44,7 +44,9 @@
                 <div class="buttons">
                     <el-row :gutter="24">
                         <el-col :span="2">
-                            <el-button style="width:100%; border: none" size="small" type="primary" @click="search()">新增</el-button>
+                            <router-link :to="{ path: '/blogedit', query: { onType: 'insert', id: id } }">
+                                <el-button style="width:100%; border: none" size="small" type="primary">新增</el-button>
+                            </router-link>
                         </el-col>
                         <el-col :span="2">
                             <el-button style="width:100%; border: none" size="small" type="success" @click="search()">修改</el-button>
@@ -61,15 +63,55 @@
                     <el-table
                     :data="tableData"
                     stripe
+                    v-loading="loading"
                     style="width: 100%">
                         <el-table-column align="center" min-width="5" type="selection"/>
-                        <el-table-column align="center" min-width="5" label="序号" type="index"/>
-                        <el-table-column align="left" prop="blogTitle" label="文章标题" min-width="60"/>
-                        <el-table-column align="center" prop="blogType" label="文章分类" min-width="60"/>
-                        <el-table-column align="center" prop="readeNumbers" label="阅读人数" min-width="60"/>
-                        <el-table-column align="center" fixed="right" label="操作" min-width="30">
-                            <el-button type="primary" size="mini" >编辑</el-button>
-                            <el-button type="danger" size="mini">删除</el-button>
+                        <el-table-column align="center" min-width="5" label="序号" type="index" fixed="left"/>
+                        <el-table-column align="left" prop="blogTitle" label="文章标题" min-width="100">
+                            <template slot-scope="scope">
+                                <span>{{scope.row.blogTitle}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column align="center" prop="blogAuthor" label="作者" min-width="60">
+                            <template slot-scope="scope">
+                                <span>{{scope.row.blogAuthor}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column align="center" prop="blogType" label="文章分类" min-width="60">
+                            <template slot-scope="scope">
+                                <span>{{scope.row.blogType}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column align="center" prop="blogLabel" label="标签" min-width="60">
+                            <template slot-scope="scope">
+                                <span>{{scope.row.blogLabel}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column align="center" prop="readNumber" label="阅读人数" min-width="60">
+                            <template slot-scope="scope">
+                                <span>{{scope.row.readNumber}} 人</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column align="center" prop="commentNumber" label="评论人数" min-width="60">
+                            <template slot-scope="scope">
+                                <span>{{scope.row.commentNumber}} 人</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column align="center" prop="createTime" label="发表时间" min-width="80">
+                            <template slot-scope="scope">
+                                <span>{{scope.row.createTime}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column align="center" prop="blogStatus" label="审核状态" min-width="60">
+                            <template slot-scope="scope">
+                                <span>{{blogStatuss[ scope.row.blogStatus ]}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column align="center" fixed="right" label="操作" min-width="90">
+                            <template slot-scope="scope">
+                                <el-button type="primary" size="mini" >编辑</el-button>
+                                <el-button type="danger" size="mini">删除</el-button>
+                            </template>
                         </el-table-column>
                     </el-table>
                 </div>
@@ -81,6 +123,7 @@
 <script>
 import adminaside from '@/components/adminaside'
 import adminheader from '@/components/adminheader'
+import { getList } from '@/api/admin/blog.js'
 export default {
     name: 'blogindex',
     components: {
@@ -90,33 +133,50 @@ export default {
 
     data() {
         return {
-            startTime: '',
-            title: '',
-            blogType: '',
+            loading: true,
+            tableData: [],
+            total: 0,
+            queryParams: {
+                currentPage: 1,
+                pageSize: 10,
+                blogTitle: '',
+                blogAuthor: '',
+                blogType: 0,
+                blogLabel: '',
+                blogStatus: 0
+            },
+            blogStatuss: [ '全部', '审核中', '未通过', '审核通过' ],
             blogTypes: [
                 { value: '1', label: 'Spring Boot' },
                 { value: '2', label: 'Spring Cloud' },
                 { value: '3', label: 'Java' },
                 { value: '4', label: 'Python' }
-            ],
-            tableData: [
-                { blogTitle: 'spring boot 集成 redis', blogType: 'spring boot', readeNumbers: 34 },
-                { blogTitle: 'docker 部署 spring boot', blogType: 'docker', readeNumbers: 1231 },
-                { blogTitle: 'docker + nginx + obs', blogType: 'docker', readeNumbers: 24 },
-                { blogTitle: '初识 spring cloud', blogType: 'spring cloud', readeNumbers: 345 },
-                { blogTitle: 'spring boot', blogType: 'spring boot', readeNumbers: 34 }
             ]
         }
     },
 
     created() {
         console.log('博客管理页测试');
+        this.getList();
     },
 
     methods: {
+        //列表
+        getList() {
+            getList(this.queryParams).then(response => {
+                this.tableData = response.data.body.dataList
+                this.total = response.data.body.total
+                this.loading = false
+            }).catch(() => {
+                this.loading = false
+            });
+        },
+
+        //查询
         search() {
             console.log(this.startTime);
         }
+
     }
 }
 </script>
