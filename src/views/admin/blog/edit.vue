@@ -5,33 +5,38 @@
     <adminheader></adminheader>
     <div class="blog-edit-main">
       <div class="blog-con">
-        <el-row :gutter="24" style="padding-top: 1%; padding-left: 1%; line-height: 3">
-          <el-col :span="1.1">
-            <span style="width: 100%">文章标题:</span>
-          </el-col>
-          <el-col :span="20">
-            <el-input size="small" v-model="blogTitle" placeholder="文章标题" clearable></el-input>
-          </el-col>
-        </el-row>
-        <div class="blog-editor" ref="editor"></div>
-        <el-row :gutter="24" style="padding-top: 1%; padding-left: 1%; line-height: 3">
-          <el-col :span="1.1">
-            <span style="width: 100%">文章分类:</span>
-          </el-col>
-          <el-col :span="20">
-            <el-select size="small" v-model="blogType" placeholder="文章分类" style="width: 25%">
-              <el-option 
-                v-for="item in blogTypes"
-                :key="item.value"
-                :value="item.value"
-                :label="item.label">
-              </el-option>
-            </el-select>
-          </el-col>
-        </el-row>
-        <div style="text-align: center; padding-top: 1%">
-          <el-button style="width: 10%" type="primary" @click="insertClock()">提&nbsp;&nbsp;交</el-button>
-        </div>
+        <el-form style="width: 100%; height:100%"
+          :inline="true"
+          :model="dataObj"
+          :rules="rules"
+          ref="blogRef"
+          label-position="right">
+          <el-row :gutter="24" style="padding-top: 1%; padding-left: 1%">
+            <el-col :span="20">
+              <el-form-item style="width: 100%" label="文章标题:" prop="blogTitle">
+                <el-input style="width: 600px" size="small" v-model="dataObj.blogTitle" placeholder="文章标题" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <div class="blog-editor" ref="editor"></div>
+          <el-row :gutter="24" style="padding-top: 1%; padding-left: 1%">
+            <el-col :span="20">
+              <el-form-item style="width: 100%" label="文章分类:" prop="blogType">
+                <el-select size="small" v-model="dataObj.blogType" placeholder="文章分类" style="width: 200px">
+                  <el-option 
+                    v-for="item in blogTypes"
+                    :key="item.value"
+                    :value="item.value"
+                    :label="item.label">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <div style="text-align: center; padding-top: 1%">
+            <el-button style="width: 10%" type="primary" v-loading="loading" @click="insertClock()">提&nbsp;&nbsp;交</el-button>
+          </div>
+        </el-form>
       </div>
     </div>
   </div>
@@ -41,6 +46,7 @@
 import adminaside from '@/components/adminaside'
 import adminheader from '@/components/adminheader'
 import Editor from 'wangeditor'
+import { insertBlog } from '@/api/admin/blog'
 export default {
     name: 'blogedit',
     components: {
@@ -50,10 +56,23 @@ export default {
 
     data() {
       return {
-        loading: true,
-        blogTitle: '',
-        blogType: '',
-        editorContent: '',
+        loading: false,
+        dataObj: {
+          blogTitle: '',
+          blogType: '',
+          content: ''
+        },
+        rules: {
+          blogTitle: [
+            { required: true, message: '文章标题不能为空！', trigger: 'blur' }
+          ],
+          content: [
+            { required: true, message: '文章内容不能为空！', trigger: 'blur' }
+          ],
+          blogType: [
+            { required: true, message: '文章类别不能为空！', trigger: 'blur' }
+          ]
+        },
         blogTypes: [
           { value: '1', label: 'Spring Boot' },
           { value: '2', label: 'Spring Cloud' },
@@ -79,7 +98,7 @@ export default {
         // })
       //}
       editor.customConfig.onchange = (html) => {
-        this.editorContent = html
+        this.dataObj.content = html
       }
       editor.create()
       //editor.txt.html(this.editorContent)
@@ -88,7 +107,40 @@ export default {
     methods: {
       //提交
       insertClock() {
-        console.log(this.editorContent);
+        console.log(this.dataObj);
+        this.$refs.blogRef.validate((valid) => {
+          if (valid) {
+            this.loading = true
+            insertBlog(this.dataObj).then(response => {
+              if (response.data.recode == 200) {
+                this.$notify({
+                  title: '成功',
+                  message: '添加成功！',
+                  type: 'success',
+                  position: 'top-right'
+                });
+                this.loading = false
+                this.$router.go(-1)
+              } else {
+                this.$notify({
+                  title: '失败',
+                  message: response.data.remsg,
+                  type: 'error',
+                  position: 'top-right'
+                });
+                this.loading = false
+              }
+            }).catch(reponse => {
+              this.$notify({
+                  title: '失败',
+                  message: response.data.remsg,
+                  type: 'error',
+                  position: 'top-right'
+                });
+                this.loading = false
+            });
+          }
+        });
       }
 
     }

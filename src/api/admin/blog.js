@@ -13,3 +13,12 @@ export function getList(params) {
     });
 }
 
+//新增
+export function insertBlog(params) {
+    return request({
+        method: 'post',
+        url: '/api/web/admin/blog/insert',
+        data: params
+    });
+}
+
