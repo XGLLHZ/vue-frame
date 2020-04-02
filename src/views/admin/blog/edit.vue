@@ -46,7 +46,7 @@
 import adminaside from '@/components/adminaside'
 import adminheader from '@/components/adminheader'
 import Editor from 'wangeditor'
-import { insertBlog } from '@/api/admin/blog'
+import { insertBlog, getBlog, updateBlog, uploadImage } from '@/api/admin/blog'
 export default {
     name: 'blogedit',
     components: {
@@ -58,6 +58,7 @@ export default {
       return {
         loading: false,
         dataObj: {
+          id: 0,
           blogTitle: '',
           blogType: '',
           content: ''
@@ -83,64 +84,109 @@ export default {
     },
 
     mounted() {
-      console.log('博客管理新增');
-      var editor = new Editor(this.$refs.editor)   //富文本编辑器初始化时在 mounted() 方法中进行（create() 不行）
-      // 自定义菜单配置
-      //editor.customConfig.zIndex = 10
-      // 文件上传
-      //editor.customConfig.customUploadImg = function(files, insert) {
-        // files 是 input 中选中的文件列表
-        // insert 是获取图片 url 后，插入到编辑器的方法
-        // files.forEach(image => {
-        //   upload(_this.imagesUploadApi, image).then(data => {
-        //     insert(data.data.url)
-        //   })
-        // })
-      //}
-      editor.customConfig.onchange = (html) => {
-        this.dataObj.content = html
-      }
-      editor.create()
-      //editor.txt.html(this.editorContent)
+      this.getShop();
     },
     
     methods: {
+      //详情
+      getShop() {
+        if(this.$route.query.onType == 'update' && this.$route.query.id != null) {
+          this.dataObj.id = this.$route.query.id
+          getShop({ id: this.dataObj.id }).then(response => {
+            if (response.data.recode == 200) {
+              this.dataObj = response.data.body.dataInfo
+              this.dataObj.content = response.data.body.dataInfo.content
+              this.initEditor()
+            } else {
+              this.$notify({
+                title: '错误',
+                message: response.data.remsg,
+                type: 'error',
+                position: 'top-right'
+              });
+            }
+          }).catch(() => {});
+        } else {
+          console.log('添加')
+          this.initEditor()
+        }
+      },
+
       //提交
       insertClock() {
         console.log(this.dataObj);
         this.$refs.blogRef.validate((valid) => {
           if (valid) {
             this.loading = true
-            insertBlog(this.dataObj).then(response => {
-              if (response.data.recode == 200) {
-                this.$notify({
-                  title: '成功',
-                  message: '添加成功！',
-                  type: 'success',
-                  position: 'top-right'
-                });
-                this.loading = false
-                this.$router.go(-1)
-              } else {
-                this.$notify({
-                  title: '失败',
-                  message: response.data.remsg,
-                  type: 'error',
-                  position: 'top-right'
-                });
-                this.loading = false
-              }
-            }).catch(reponse => {
-              this.$notify({
-                  title: '失败',
-                  message: response.data.remsg,
-                  type: 'error',
-                  position: 'top-right'
-                });
-                this.loading = false
-            });
+            if (this.dataObj.id == 0) {
+              insertBlog(this.dataObj).then(response => {
+                if (response.data.recode == 200) {
+                  this.$notify({
+                    title: '成功',
+                    message: '添加成功！',
+                    type: 'success',
+                    position: 'top-right'
+                  });
+                  this.loading = false
+                  this.$router.go(-1)
+                } else {
+                  this.$notify({
+                    title: '失败',
+                    message: response.data.remsg,
+                    type: 'error',
+                    position: 'top-right'
+                  });
+                  this.loading = false
+                }
+              }).catch(reponse => {});
+            } else {
+              updateBlog(this.dataObj).then(response => {
+                if (response.data.recode == 200) {
+                  this.$notify({
+                    title: '成功',
+                    message: '修改成功！',
+                    type: 'success',
+                    position: 'top-right'
+                  });
+                  this.loading = false
+                  this.$router.go(-1)
+                } else {
+                  this.$notify({
+                    title: '失败',
+                    message: response.data.remsg,
+                    type: 'error',
+                    position: 'top-right'
+                  });
+                  this.loading = false
+                }
+              }).catch(reponse => {});
+            }
           }
         });
+      },
+
+      //初始化富文本
+      initEditor() {
+        var editor = new Editor(this.$refs.editor)   //富文本编辑器初始化时在 mounted() 方法中进行（create() 不行）
+        // 自定义菜单配置
+        //editor.customConfig.zIndex = 10
+        // 文件上传
+        editor.customConfig.customUploadImg = function(files, insert) {
+          // files 是 input 中选中的文件列表
+          // insert 是获取图片 url 后，插入到编辑器的方法
+          files.forEach(image => {
+            var data = new FormData()
+            data.append('file', image)
+            uploadImage(data).then(response => {
+              insert(response.data.body.dataInfo)
+            })
+          })
+        }
+        editor.customConfig.onchange = (html) => {
+          this.dataObj.content = html
+        }
+        editor.create()
+        editor.txt.html(this.dataObj.content)
       }
 
     }
