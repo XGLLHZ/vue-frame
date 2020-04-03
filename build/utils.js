@@ -47,7 +47,8 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
-        fallback: 'vue-style-loader'
+        fallback: 'vue-style-loader',
+        publicPath: '../../'   //解决 css 中 background-img 中图片找不到问题
       })
     } else {
       return ['vue-style-loader'].concat(loaders)

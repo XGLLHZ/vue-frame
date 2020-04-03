@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {   //代理服务器 本地代理
       '/api': {
-        target: 'http://localhost:8082',   //请求的第三方接口
+        target: 'http://www.xgllhz.top',   //请求的第三方接口
         changeOrigin: true,   //在本地创建一个虚拟服务端，然后发送请求，接受请求(客户端和服务器端存在跨域问题，但服务器与服务器间不存在跨域问题)
         pathRewrite: {   //路径重写
           '^/api': 'api'   //替换target中的http地址，也就是说你在请求'http://192.168.101.26:8081/user/list'的时候就可以写成'api/user/list'

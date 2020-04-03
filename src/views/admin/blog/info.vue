@@ -1,16 +1,28 @@
 <!-- 博客详情页面 -->
 <template>
-  <div class="index-con">
+  <div class="blog-info">
         <adminaside></adminaside>
         <adminheader></adminheader>
-        <div class="main-con">
-            <div class="con-2">
-                <div class="searchs">
+        <div class="blog-info-main">
+            <div class="blog-info-2">
+                <div class="blog-info-searchs">
                     <el-row :gutter="24">
                         <el-col :span="20">
-                            <div></div>
+                            <span>文章标题: {{ dataInfo.blogTitle }}</span>
                         </el-col>
                     </el-row>
+                    <el-row :gutter="24" style="padding-top: 1%; color: #777; font-size: 13px">
+                        <el-col :span="4">
+                            <span>作者: {{ dataInfo.blogAuthor }}</span>
+                        </el-col>
+                        <el-col :span="4">
+                            <span>阅读人数: {{ dataInfo.readNumber }} 人</span>
+                        </el-col>
+                        <el-col :span="4">
+                            <span>评论人数: {{ dataInfo.commentNumber }} 人</span>
+                        </el-col>
+                    </el-row>
+                    <div style="padding-top: 1%; color: #777" v-html="dataInfo.content"></div>
                 </div>
             </div>
         </div>
@@ -59,46 +71,28 @@ export default {
 </script>
 
 <style>
-.index-con {
+.blog-info {
     width: 100%;
     height: 100%;
-    position: fixed;
     background-color: #F4F5F8;
 }
-.main-con {
+.blog-info-main {
     margin-left: 17%;
     padding-top: 75px;
     width: 81%;
     height: 100%;
     background-color: #F4F5F8;
 }
-.con-2 {
+.blog-info-2 {
     width: 100%;
     height: 87%;
     background-color: white;
     text-align: left;
 }
-.searchs {
+.blog-info-searchs {
     padding-top: 1%;
     padding-left: 1%;
     width: 100%;
-    height: 6%;
-}
-.buttons {
-    padding-top: 1%;
-    padding-left: 1%;
-    width: 100%;
-    height: 6%;
-}
-.tables {
-    padding-top: 1%;
-    padding-left: 1%;
-    padding-right: 1%;
-    width: 98%;
-    height: 80%;
-}
-.block {
-    padding-top: 2%;
 }
 </style>
 

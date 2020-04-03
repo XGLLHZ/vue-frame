@@ -5,47 +5,25 @@
     <div class="con">
       <div class="content">
         <div class="con-left">
-          <div class="left-li">
+          <div class="left-li" v-for="item in dataList" v-loading="loading">
             <div class="li-title">
-              <router-link to="/info">spring boot 集成 redis</router-link>
+              <router-link :to="{ path: '/info', query: { id: item.id } }">{{ item.blogTitle }}</router-link>
             </div>
-            <div class="li-info">前言：我是文章简介巴拉巴拉一大堆阿斯达大大大大大大所大大所大大所大大所大所大所大大所大所大递四方速递水电费递四方速递放松放松第三方士大夫士大夫是发送到发送到发送到水电费第三方第三方第三方水电费水电费水电费胜多负少的但是</div>
+            <div class="li-info">{{item.blogTitle}}</div>
             <div class="li-footer">
-              <span>2020-02-24 16:44&nbsp;&nbsp;</span>
-              <span>阅读数 29&nbsp;&nbsp;</span>
-              <span>评论数 4</span>
-            </div>
-          </div>
-          <div class="left-li">
-            <div class="li-title">
-              <router-link to="/">spring boot 集成 redis</router-link>
-            </div>
-            <div class="li-info">前言：我是文章简介巴拉巴拉一大堆阿斯达大大大大大大所大大所大大所大大所大所大所大大所大所大递四方速递水电费递四方速递放松放松第三方士大夫士大夫是发送到发送到发送到水电费第三方第三方第三方水电费水电费水电费胜多负少的但是</div>
-            <div class="li-footer">
-              <span>2020-02-24 16:44&nbsp;&nbsp;</span>
-              <span>阅读数 29&nbsp;&nbsp;</span>
-              <span>评论数 4</span>
-            </div>
-          </div>
-          <div class="left-li">
-            <div class="li-title">
-              <router-link to="/">spring boot 集成 redis</router-link>
-            </div>
-            <div class="li-info">前言：我是文章简介巴拉巴拉一大堆阿斯达大大大大大大所大大所大大所大大所大所大所大大所大所大递四方速递水电费递四方速递放松放松第三方士大夫士大夫是发送到发送到发送到水电费第三方第三方第三方水电费水电费水电费胜多负少的但是</div>
-            <div class="li-footer">
-              <span>2020-02-24 16:44&nbsp;&nbsp;</span>
-              <span>阅读数 29&nbsp;&nbsp;</span>
-              <span>评论数 4</span>
+              <span>{{ item.updateTime }}&nbsp;&nbsp;</span>
+              <span>阅读数 {{ item.readNumber }}&nbsp;&nbsp;</span>
+              <span>评论数 {{ item.commentNumber }}</span>
             </div>
           </div>
         </div>
         <div class="con-right">
           <div class="right-one">
-            <span><router-link to="/"><img src="../../assets/github.png" style="width:14%; margin-left:25%"/></router-link></span>
-            <span><router-link to="/"><img src="../../assets/csdn.png" style="width:14%; margin-left:4%"/></router-link></span>
+            <span><a href="https://github.com/XGLLHZ"><img src="../../assets/github.png" style="width:14%; margin-left:25%"/></a></span>
+            <span><a href="https://blog.csdn.net/XGLLHZ"><img src="../../assets/csdn.png" style="width:14%; margin-left:4%"/></a></span>
             <span><router-link to="/"><img src="../../assets/sina.png" style="width:14%; margin-left:4%"/></router-link></span>
           </div>
-          <div class="right-two">
+          <!-- <div class="right-two">
             <span>精选文章</span>
           </div>
           <div class="right-three">
@@ -61,7 +39,7 @@
               <div class="three-one">spring cloud 架构</div>
               <div class="three-two">深度剖析 spring cloud 架构 你像窝在被子里的舒服</div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -72,12 +50,40 @@
 <script>
 import homenav from '@/components/homenav'
 import homefooter from '@/components/homefooter'
+import { getList } from '@/api/web/index'
 export default {
     name: 'index',
     components: {
         homenav,
         homefooter
+    },
+
+    data() {
+        return {
+            loading: true,
+            id: 0,
+            dataList: [],
+            blogType: 0
+        }
+    },
+
+    created() {
+      this.getLists()
+    },
+
+    methods: {
+        //列表
+        getLists() {
+            this.blogType = this.$route.query.blogType
+            getList({ blogType: this.blogType }).then(response => {
+                this.dataList = response.data.body.dataList
+                this.loading = false
+            }).catch(() => {
+                this.loading = false
+            });
+        },
     }
+
 }
 </script>
 

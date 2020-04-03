@@ -156,12 +156,13 @@ export default {
                 searchTime: []
             },
             blogStatuss: [ '全部', '审核中', '未通过', '审核通过' ],
-            blogTypes: ['全部', 'Spring Boot', 'Spring Cloud', 'Java', 'Python'],
+            blogTypes: ['全部', 'Spring Boot', 'Spring Cloud', 'Java', 'Python', 'Story'],
             blogTypeOptions: [
                 { value: '1', label: 'Spring Boot' },
                 { value: '2', label: 'Spring Cloud' },
                 { value: '3', label: 'Java' },
-                { value: '4', label: 'Python' }
+                { value: '4', label: 'Python' },
+                { value: '5', label: 'Story' }
             ]
         }
     },

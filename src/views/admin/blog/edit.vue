@@ -78,7 +78,8 @@ export default {
           { value: '1', label: 'Spring Boot' },
           { value: '2', label: 'Spring Cloud' },
           { value: '3', label: 'Java' },
-          { value: '4', label: 'Python' }
+          { value: '4', label: 'Python' },
+          { value: '5', label: 'Story' }
         ]
       }
     },

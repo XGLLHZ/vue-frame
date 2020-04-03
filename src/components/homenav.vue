@@ -8,12 +8,12 @@
         </div>
         <div class="nav-two">
           <ul>
-            <li><router-link to="/">Story</router-link></li>
-            <li><router-link to="/">Python</router-link></li>
-            <li><router-link to="/">Spring Cloud</router-link></li>
-            <li><router-link to="/">Spring Boot</router-link></li>
-            <li><router-link to="/typelist">Java</router-link></li>
-            <li><router-link to="/">Home</router-link></li>
+            <li><router-link :to="{ path: '/', query: { blogType: 5 } }">Story</router-link></li>
+            <li><router-link :to="{ path: '/', query: { blogType: 4 } }">Python</router-link></li>
+            <li><router-link :to="{ path: '/', query: { blogType: 2 } }">Spring Cloud</router-link></li>
+            <li><router-link :to="{ path: '/', query: { blogType: 1 } }">Spring Boot</router-link></li>
+            <li><router-link :to="{ path: '/', query: { blogType: 3 } }">Java</router-link></li>
+            <li><router-link :to="{ path: '/', query: { blogType: 0 } }">Home</router-link></li>
           </ul>
         </div>
       </div>
